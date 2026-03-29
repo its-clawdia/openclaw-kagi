@@ -63,8 +63,8 @@ export async function sessionSearch(
   if (!tokenStatus.valid) {
     const messages: Record<string, string> = {
       redirect_to_login:
-        "Your Kagi session token has expired or is invalid. Ask the user to generate a new Session Link at https://kagi.com/settings/user_details and paste it here. Then run: openclaw configure set plugins.entries.kagi.config.sessionToken \"NEW_TOKEN\" and retry.",
-      http_error: `Kagi returned HTTP ${tokenStatus.statusCode}. The session token may be invalid. Ask the user for a new Session Link from https://kagi.com/settings/user_details.`,
+        "Kagi Session Link has expired or is invalid. Ask the user to generate a new one at https://kagi.com/settings/user_details and paste it, or use: /kagi token <session-link>",
+      http_error: `Kagi returned HTTP ${tokenStatus.statusCode}. The Session Link may be invalid. Ask the user for a new one from https://kagi.com/settings/user_details or use: /kagi token <session-link>`,
     };
     return {
       ok: false,

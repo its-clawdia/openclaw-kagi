@@ -87,15 +87,12 @@ export function createKagiWebSearchProvider() {
             error: "missing_session_token",
             action: "ask_user_for_token",
             message: [
-              "Kagi session token not configured.",
+              "Kagi Session Link not configured.",
               "",
-              "Ask the user to paste their Kagi Session Link or token.",
+              "Ask the user to paste their Session Link, or use: /kagi token <session-link>",
               "Get it from: https://kagi.com/settings/user_details",
-              "Accepts the full URL or just the token value.",
               "",
-              `Once you have it, write it to ${TOKEN_FILE}:`,
-              '  {"sessionToken": "THE_TOKEN_VALUE"}',
-              "Then retry the search. No restart needed.",
+              "Then retry the search.",
             ].join("\n"),
           };
         }

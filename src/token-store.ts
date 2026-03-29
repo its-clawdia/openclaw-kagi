@@ -28,3 +28,11 @@ export function writeStoredToken(tokenOrUrl: string): string {
   );
   return token;
 }
+
+export function clearStoredToken(): void {
+  try {
+    writeFileSync(STORE_PATH, "{}\n", "utf-8");
+  } catch {
+    // ignore if file doesn't exist
+  }
+}
