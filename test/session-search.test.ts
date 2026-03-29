@@ -1,11 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
 import { sessionSearch } from "../src/search/session-search.js";
-
-async function readFixture(name: string): Promise<string> {
-  return readFile(join(import.meta.dirname, "fixtures", name), "utf-8");
-}
+import { loadFixture } from "./helpers.js";
 
 /** Simulate Kagi's valid-token 302 → cookie → 200 flow */
 function mockValidTokenFlow(html: string) {
@@ -13,7 +8,6 @@ function mockValidTokenFlow(html: string) {
   return vi.spyOn(globalThis, "fetch").mockImplementation(async () => {
     callCount++;
     if (callCount === 1) {
-      // First call: 302 with Set-Cookie
       return new Response("", {
         status: 302,
         headers: {
@@ -22,7 +16,6 @@ function mockValidTokenFlow(html: string) {
         },
       });
     }
-    // Second call: 200 with results
     return new Response(html, { status: 200 });
   });
 }
@@ -33,7 +26,7 @@ describe("sessionSearch", () => {
   });
 
   it("handles two-step cookie auth flow (302 → 200)", async () => {
-    const html = await readFixture("kagi-results-normal.html");
+    const html = loadFixture("kagi-results-normal.html");
     const fetchSpy = mockValidTokenFlow(html);
 
     const result = await sessionSearch({
@@ -48,12 +41,11 @@ describe("sessionSearch", () => {
       expect(result.results.length).toBeGreaterThan(0);
       expect(result.results.length).toBeLessThanOrEqual(5);
     }
-    // Should have made 2 fetch calls
     expect(fetchSpy).toHaveBeenCalledTimes(2);
   });
 
   it("passes cookie from 302 response to follow-up request", async () => {
-    const html = await readFixture("kagi-results-normal.html");
+    const html = loadFixture("kagi-results-normal.html");
     const fetchSpy = mockValidTokenFlow(html);
 
     await sessionSearch({
@@ -63,14 +55,14 @@ describe("sessionSearch", () => {
       timeoutMs: 10000,
     });
 
-    // Second call should include the cookie
     const secondCallOpts = fetchSpy.mock.calls[1][1] as RequestInit;
-    const cookieHeader = (secondCallOpts.headers as Record<string, string>)?.Cookie;
+    const cookieHeader = (secondCallOpts.headers as Record<string, string>)
+      ?.Cookie;
     expect(cookieHeader).toContain("kagi_session=TOKEN123");
   });
 
   it("handles direct 200 response (already authenticated)", async () => {
-    const html = await readFixture("kagi-results-normal.html");
+    const html = loadFixture("kagi-results-normal.html");
     vi.spyOn(globalThis, "fetch").mockResolvedValue(
       new Response(html, { status: 200 })
     );
@@ -89,7 +81,7 @@ describe("sessionSearch", () => {
   });
 
   it("trims results to requested count", async () => {
-    const html = await readFixture("kagi-results-normal.html");
+    const html = loadFixture("kagi-results-normal.html");
     mockValidTokenFlow(html);
 
     const result = await sessionSearch({
@@ -146,7 +138,7 @@ describe("sessionSearch", () => {
   });
 
   it("returns breakage error when parser fails on content-rich page", async () => {
-    const html = await readFixture("kagi-results-mutated.html");
+    const html = loadFixture("kagi-results-mutated.html");
     vi.spyOn(globalThis, "fetch").mockResolvedValue(
       new Response(html, { status: 200 })
     );
@@ -185,7 +177,7 @@ describe("sessionSearch", () => {
   });
 
   it("constructs correct URL with token and query", async () => {
-    const html = await readFixture("kagi-results-normal.html");
+    const html = loadFixture("kagi-results-normal.html");
     const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue(
       new Response(html, { status: 200 })
     );
