@@ -21,21 +21,14 @@ export type TokenStatus =
   | { valid: true }
   | {
       valid: false;
-      reason: "redirect_to_login" | "login_form_detected" | "http_error";
+      reason: "redirect_to_login" | "http_error";
       statusCode?: number;
       detail?: string;
     };
 
-/** Search mode */
-export type KagiSearchMode = "session" | "api";
-
 /** Plugin-specific config shape */
 export interface KagiPluginConfig {
-  mode?: KagiSearchMode;
   sessionToken?: string;
-  webSearch?: {
-    apiKey?: string;
-  };
 }
 
 /** Selector definition for a single search result */

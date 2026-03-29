@@ -1,42 +1,44 @@
 # openclaw-kagi
 
-Kagi web search provider plugin for [OpenClaw](https://openclaw.ai). Uses Kagi Session Links to provide privacy-first search results through OpenClaw's `web_search` tool.
+Privacy-first web search powered by [Kagi](https://kagi.com) for [OpenClaw](https://openclaw.ai).
 
-## How it works
+Uses your existing Kagi subscription — no API key or extra costs required.
 
-This plugin scrapes Kagi's server-rendered HTML search results using your Kagi Session Link token. 
-
-**Dual-mode design:** When the Kagi Search API exits invite-only beta, the plugin can switch to the official API with a config change.
-
-## Setup
-
-### 1. Install
+## Install
 
 ```bash
 openclaw plugins install openclaw-kagi
 ```
 
-### 2. Get your Session Link token
+## Setup
+
+### Option 1: `/kagi` command
+
+```
+/kagi token https://kagi.com/search?token=...
+```
+
+### Option 2: Automatic
+
+Just use web search. If no Session Link is configured, the agent will ask you to paste one.
+
+### Getting your Session Link
 
 1. Go to https://kagi.com/settings/user_details
-2. Find "Session Link" and copy the URL
-3. The token is the value after `?token=`
+2. Copy your **Session Link**
+3. Paste it when prompted, or use `/kagi token <session-link>`
 
-### 3. Configure
+## Commands
 
-Set the token via environment variable:
+| Command | Description |
+|---------|-------------|
+| `/kagi token <session-link>` | Save your Kagi Session Link |
+| `/kagi status` | Check if a Session Link is configured |
+| `/kagi clear` | Remove saved Session Link |
 
-```bash
-export KAGI_SESSION_TOKEN="your_token_here"
-```
+## Configuration
 
-Or paste the full Session Link URL — the plugin extracts the token automatically:
-
-```bash
-export KAGI_SESSION_TOKEN="https://kagi.com/search?token=your_token_here"
-```
-
-Or in OpenClaw config:
+Set Kagi as your search provider in OpenClaw config:
 
 ```json5
 {
@@ -47,40 +49,24 @@ Or in OpenClaw config:
       },
     },
   },
-  plugins: {
-    entries: {
-      kagi: {
-        config: {
-          sessionToken: "your_token_here",
-        },
-      },
-    },
-  },
 }
 ```
 
-## Features
-
-- **Privacy-first search** via your Kagi subscription
-- **No API key needed** — uses Session Links (included in all Kagi plans)
-- **Token expiry detection** — clear error messages when your token needs refreshing
-- **HTML breakage detection** — reports when Kagi's HTML structure changes, with debug info
-- **Result caching** — configurable TTL (default 15 minutes)
-- **Accepts full URL or raw token** — paste either format
+The Session Link is stored separately in `~/.openclaw/kagi.config.json`.
 
 ## Supported parameters
 
-| Parameter | Support | Notes |
-|-----------|---------|-------|
-| `query` | ✅ | Search query |
-| `count` | ✅ | Results to return (1-10) |
-| `country` | ❌ | Not available via Session Links |
-| `language` | ❌ | Not available via Session Links |
-| `freshness` | ❌ | Not available via Session Links |
+| Parameter | Support |
+|-----------|---------|
+| `query` | ✅ |
+| `count` | ✅ (1-10) |
+| `country` | ❌ |
+| `language` | ❌ |
+| `freshness` | ❌ |
 
-## Token management
+## Session Link management
 
-Session Link tokens expire after 90 days of inactivity or when you log out of the session they were copied from. When the plugin detects an expired token, it returns a clear message with instructions to generate a new one.
+Session Links expire after 90 days of inactivity or when you log out of the session they were created from. When the plugin detects an expired link, it will ask you for a new one.
 
 ## Development
 
@@ -88,9 +74,6 @@ Session Link tokens expire after 90 days of inactivity or when you log out of th
 npm install
 npm run build
 npm test
-
-# Verify with real Kagi account
-KAGI_SESSION_TOKEN="your_token" node scripts/verify.mjs "test query"
 ```
 
 ## License

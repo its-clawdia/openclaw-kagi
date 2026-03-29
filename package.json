@@ -1,18 +1,25 @@
 {
   "name": "openclaw-kagi",
   "version": "1.0.0",
-  "description": "Privacy-first web search powered by Kagi Session Links",
+  "description": "Privacy-first web search powered by Kagi",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist"],
+  "files": ["dist", "openclaw.plugin.json"],
   "scripts": {
     "build": "tsc",
     "test": "vitest run",
     "test:watch": "vitest"
   },
+  "keywords": ["openclaw", "openclaw-plugin", "kagi", "web-search", "privacy"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/its-clawdia/openclaw-kagi"
+  },
+  "author": "Clawdia <clawdia@mailbox.org>",
+  "license": "MIT",
   "peerDependencies": {
-    "openclaw": "*"
+    "openclaw": ">=2026.3.0"
   },
   "dependencies": {
     "linkedom": "^0.18.0"
@@ -22,7 +29,6 @@
     "typescript": "^5.7.0",
     "vitest": "^3.0.0"
   },
-  "license": "MIT",
   "openclaw": {
     "extensions": ["./dist/index.js"]
   }
