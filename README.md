@@ -7,7 +7,7 @@ Uses your existing Kagi subscription — no API key or extra costs required.
 ## Install
 
 ```bash
-openclaw plugins install its-clawdia/openclaw-kagi
+openclaw plugins install openclaw-kagi
 ```
 
 ## Setup
