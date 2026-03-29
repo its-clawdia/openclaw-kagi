@@ -5,13 +5,22 @@
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist", "openclaw.plugin.json"],
+  "files": [
+    "dist",
+    "openclaw.plugin.json"
+  ],
   "scripts": {
     "build": "tsc",
     "test": "vitest run",
     "test:watch": "vitest"
   },
-  "keywords": ["openclaw", "openclaw-plugin", "kagi", "web-search", "privacy"],
+  "keywords": [
+    "openclaw",
+    "openclaw-plugin",
+    "kagi",
+    "web-search",
+    "privacy"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/its-clawdia/openclaw-kagi"
@@ -22,14 +31,16 @@
     "openclaw": ">=2026.3.0"
   },
   "dependencies": {
-    "linkedom": "^0.18.0"
+    "linkedom": "^0.18.12"
   },
   "devDependencies": {
     "openclaw": "*",
-    "typescript": "^5.7.0",
-    "vitest": "^3.0.0"
+    "typescript": "^6.0.2",
+    "vitest": "^4.1.2"
   },
   "openclaw": {
-    "extensions": ["./dist/index.js"]
+    "extensions": [
+      "./dist/index.js"
+    ]
   }
 }
