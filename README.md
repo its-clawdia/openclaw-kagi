@@ -7,7 +7,7 @@ Uses your existing Kagi subscription — no API key or extra costs required.
 ## Install
 
 ```bash
-openclaw plugins install openclaw-kagi
+openclaw plugins install its-clawdia/openclaw-kagi
 ```
 
 ## Setup
@@ -15,7 +15,7 @@ openclaw plugins install openclaw-kagi
 ### Option 1: `/kagi` command
 
 ```
-/kagi token https://kagi.com/search?token=...
+/kagi session https://kagi.com/search?token=...
 ```
 
 ### Option 2: Automatic
@@ -26,13 +26,13 @@ Just use web search. If no Session Link is configured, the agent will ask you to
 
 1. Go to https://kagi.com/settings/user_details
 2. Copy your **Session Link**
-3. Paste it when prompted, or use `/kagi token <session-link>`
+3. Paste it when prompted, or use `/kagi session <session-link>`
 
 ## Commands
 
 | Command | Description |
 |---------|-------------|
-| `/kagi token <session-link>` | Save your Kagi Session Link |
+| `/kagi session <session-link>` | Save your Kagi Session Link |
 | `/kagi status` | Check if a Session Link is configured |
 | `/kagi clear` | Remove saved Session Link |
 

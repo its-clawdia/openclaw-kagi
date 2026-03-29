@@ -20,15 +20,15 @@ describe("/kagi command", () => {
   describe("/kagi (no args)", () => {
     it("shows usage help", async () => {
       const result = await command.handler({ args: "" });
-      expect(result.text).toContain("/kagi token");
+      expect(result.text).toContain("/kagi session");
       expect(result.text).toContain("/kagi status");
       expect(result.text).toContain("/kagi clear");
     });
   });
 
-  describe("/kagi token", () => {
+  describe("/kagi session", () => {
     it("saves a raw token", async () => {
-      const result = await command.handler({ args: "token ABC123DEF" });
+      const result = await command.handler({ args: "session ABC123DEF" });
       expect(result.text).toContain("✅");
       expect(result.text).toContain("ABC1");
       expect(result.text).toContain("✅");
@@ -39,7 +39,7 @@ describe("/kagi command", () => {
 
     it("extracts token from a full Session Link URL", async () => {
       const result = await command.handler({
-        args: "token https://kagi.com/search?token=MY_TOKEN_VALUE",
+        args: "session https://kagi.com/search?token=MY_TOKEN_VALUE",
       });
       expect(result.text).toContain("✅");
 

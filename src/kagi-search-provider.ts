@@ -89,7 +89,7 @@ export function createKagiWebSearchProvider() {
             message: [
               "Kagi Session Link not configured.",
               "",
-              "Ask the user to paste their Session Link, or use: /kagi token <session-link>",
+              "Ask the user to paste their Session Link, or use: /kagi session <session-link>",
               "Get it from: https://kagi.com/settings/user_details",
               "",
               "Then retry the search.",

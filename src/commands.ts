@@ -7,7 +7,7 @@ export function createKagiCommands() {
   return {
     name: "kagi",
     description:
-      "Manage Kagi search: /kagi token <session-link>, /kagi status, /kagi clear",
+      "Manage Kagi search: /kagi session <session-link>, /kagi status, /kagi clear",
     acceptsArgs: true,
     requireAuth: true,
     handler: async (ctx: { args?: string }) => {
@@ -16,10 +16,10 @@ export function createKagiCommands() {
       const value = rest.join(" ").trim();
 
       switch (subcommand?.toLowerCase()) {
-        case "token": {
+        case "session": {
           if (!value) {
             return {
-              text: `Usage: /kagi token <session-link>\n\nPaste your Session Link from ${SETTINGS_URL}`,
+              text: `Usage: /kagi session <session-link>\n\nPaste your Session Link from ${SETTINGS_URL}`,
             };
           }
           const token = writeStoredToken(value);
@@ -49,9 +49,9 @@ export function createKagiCommands() {
           return {
             text: [
               "Usage:",
-              "  /kagi token <session-link>  — Save your Kagi Session Link",
-              "  /kagi status                — Check if a Session Link is configured",
-              "  /kagi clear                 — Remove saved Session Link",
+              "  /kagi session <session-link>  — Save your Kagi Session Link",
+              "  /kagi status                  — Check if a Session Link is configured",
+              "  /kagi clear                   — Remove saved Session Link",
               "",
               `Get your Session Link from: ${SETTINGS_URL}`,
             ].join("\n"),
