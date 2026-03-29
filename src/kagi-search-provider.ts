@@ -19,18 +19,34 @@ import {
 import { sessionSearch } from "./search/session-search.js";
 import { apiSearch } from "./search/api-search.js";
 import { extractToken } from "./token-validator.js";
+import { readStoredToken } from "./token-store.js";
 import type { KagiSearchMode, KagiPluginConfig } from "./search/types.js";
 
 const PROVIDER_ID = "kagi";
 
+/**
+ * Resolve session token from multiple sources (priority order):
+ * 1. Plugin token store (~/.openclaw/kagi-token.json) — set via chat
+ * 2. Environment variable KAGI_SESSION_TOKEN
+ * 3. Plugin config (plugins.entries.kagi.config.sessionToken)
+ */
 function resolveSessionToken(
   pluginConfig?: KagiPluginConfig
 ): string | undefined {
+  // 1. Plugin's own store (highest priority — most recently set by user)
+  const stored = readStoredToken();
+  if (stored) return stored;
+
+  // 2. Environment variable
+  const envVal = readProviderEnvValue(["KAGI_SESSION_TOKEN"]) ?? undefined;
+  if (envVal) return extractToken(envVal);
+
+  // 3. Plugin config in openclaw.json
   if (pluginConfig?.sessionToken) {
     return extractToken(pluginConfig.sessionToken);
   }
-  const envVal = readProviderEnvValue(["KAGI_SESSION_TOKEN"]) ?? undefined;
-  return envVal ? extractToken(envVal) : undefined;
+
+  return undefined;
 }
 
 function resolveMode(pluginConfig?: KagiPluginConfig): KagiSearchMode {
@@ -152,9 +168,8 @@ export function createKagiWebSearchProvider() {
                 "They can get it from: https://kagi.com/settings/user_details",
                 "Accepts either the full URL (https://kagi.com/search?token=...) or just the token.",
                 "",
-                "Once you have it, save it to ~/.openclaw/openclaw.json by setting",
-                "plugins.entries.kagi.config.sessionToken to the token value (not the full URL —",
-                "extract the token part after ?token= if they paste a URL).",
+                "Once you have it, write it to ~/.openclaw/kagi-token.json like:",
+                '  {"sessionToken": "THE_TOKEN_VALUE", "updatedAt": "2026-01-01T00:00:00Z"}',
                 "Then retry the search. No gateway restart needed.",
               ].join("\n"),
             };
