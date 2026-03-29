@@ -60,9 +60,10 @@ export function createKagiWebSearchProvider() {
       getScopedCredentialValue(searchConfig, PROVIDER_ID),
     setCredentialValue: (target: any, value: any) =>
       setScopedCredentialValue(target, PROVIDER_ID, value),
-    getConfiguredCredentialValue: (config: any) =>
-      resolveProviderWebSearchPluginConfig(config, PROVIDER_ID)?.sessionToken ??
-      resolveProviderWebSearchPluginConfig(config, PROVIDER_ID)?.apiKey,
+    getConfiguredCredentialValue: (config: any) => {
+      const wsCfg = resolveProviderWebSearchPluginConfig(config, PROVIDER_ID);
+      return wsCfg?.sessionToken ?? wsCfg?.apiKey;
+    },
     setConfiguredCredentialValue: (target: any, value: any) => {
       setProviderWebSearchPluginConfigValue(
         target,
@@ -75,10 +76,6 @@ export function createKagiWebSearchProvider() {
       enablePluginInConfig(config, PROVIDER_ID).config,
 
     createTool: (ctx: any) => {
-      const pluginConfig: KagiPluginConfig | undefined =
-        resolveProviderWebSearchPluginConfig(ctx.config, PROVIDER_ID);
-      const mode = resolveMode(pluginConfig);
-
       return {
         description:
           "Search the web using Kagi, a privacy-first search engine. " +
@@ -102,6 +99,12 @@ export function createKagiWebSearchProvider() {
         },
 
         execute: async (args: Record<string, unknown>) => {
+          // Resolve config fresh on every call so token updates
+          // (via chat, env var, or config edit) take effect immediately
+          const pluginConfig: KagiPluginConfig | undefined =
+            ctx.config?.plugins?.entries?.kagi?.config;
+          const mode = resolveMode(pluginConfig);
+
           const query = readStringParam(args, "query", { required: true });
           if (!query) {
             return {
@@ -141,16 +144,18 @@ export function createKagiWebSearchProvider() {
           if (!token) {
             return {
               error: "missing_session_token",
+              action: "ask_user_for_token",
               message: [
                 "Kagi session token not configured.",
                 "",
-                "To set up Kagi search:",
-                "1. Go to https://kagi.com/settings/user_details",
-                "2. Find 'Session Link' and copy the URL",
-                "3. Extract the token from the URL (the value after ?token=)",
-                "4. Set it in your config:",
-                "   - Environment variable: KAGI_SESSION_TOKEN=<token>",
-                "   - Or in openclaw config: plugins.entries.kagi.config.sessionToken",
+                "ACTION REQUIRED: Ask the user to paste their Kagi Session Link or token.",
+                "They can get it from: https://kagi.com/settings/user_details",
+                "Accepts either the full URL (https://kagi.com/search?token=...) or just the token.",
+                "",
+                "Once you have it, save it to ~/.openclaw/openclaw.json by setting",
+                "plugins.entries.kagi.config.sessionToken to the token value (not the full URL —",
+                "extract the token part after ?token= if they paste a URL).",
+                "Then retry the search. No gateway restart needed.",
               ].join("\n"),
             };
           }
