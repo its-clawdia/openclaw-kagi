@@ -4,7 +4,7 @@ Kagi web search provider plugin for [OpenClaw](https://openclaw.ai). Uses Kagi S
 
 ## How it works
 
-This plugin scrapes Kagi's server-rendered HTML search results using your Kagi Session Link token. No API key required — uses your existing Kagi subscription at no additional cost.
+This plugin scrapes Kagi's server-rendered HTML search results using your Kagi Session Link token. 
 
 **Dual-mode design:** When the Kagi Search API exits invite-only beta, the plugin can switch to the official API with a config change.
 
