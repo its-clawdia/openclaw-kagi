@@ -1,6 +1,6 @@
 {
   "name": "openclaw-kagi",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Privacy-first web search powered by Kagi",
   "type": "module",
   "main": "dist/index.js",
@@ -44,6 +44,9 @@
     ],
     "compat": {
       "pluginApi": ">=2026.3.28"
+    },
+    "build": {
+      "openclawVersion": "2026.3.28"
     }
   }
 }
