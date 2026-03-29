@@ -1,0 +1,1 @@
+302 redirect to https://kagi.com/signin?p=invalid_token (empty body)

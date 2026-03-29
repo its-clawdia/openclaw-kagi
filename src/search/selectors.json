@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "lastVerified": "2026-03-29",
+  "searchUrl": "https://kagi.com/html/search",
+  "organicResults": {
+    "resultContainer": "div._0_SRI.search-result",
+    "title": "a.__sri_title_link",
+    "url": "a.__sri_title_link",
+    "urlAttribute": "href",
+    "snippet": "div.__sri-desc",
+    "published": "span.__sri-time"
+  },
+  "groupedResults": {
+    "resultContainer": "div.__srgi",
+    "title": "a._0_URL",
+    "url": "a._0_URL",
+    "urlAttribute": "href"
+  },
+  "noResultsIndicator": ".search-no-results, .no-results",
+  "loginIndicators": [
+    "signin?p=invalid_token"
+  ],
+  "minExpectedPageBytes": 5000
+}

@@ -1,0 +1,26 @@
+{
+  "name": "openclaw-kagi",
+  "version": "1.0.0",
+  "description": "Privacy-first web search powered by Kagi Session Links",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "peerDependencies": {
+    "openclaw": "*"
+  },
+  "dependencies": {
+    "linkedom": "^0.18.0"
+  },
+  "devDependencies": {
+    "openclaw": "*",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  },
+  "license": "MIT"
+}

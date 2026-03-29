@@ -1,0 +1,47 @@
+{
+  "id": "kagi",
+  "name": "Kagi Search",
+  "description": "Privacy-first web search powered by Kagi Session Links",
+  "version": "1.0.0",
+  "contracts": {
+    "webSearchProviders": ["kagi"]
+  },
+  "uiHints": {
+    "sessionToken": {
+      "label": "Kagi Session Token",
+      "placeholder": "paste token from your Session Link URL",
+      "sensitive": true,
+      "helpUrl": "https://kagi.com/settings/user_details"
+    },
+    "mode": {
+      "label": "Search mode",
+      "description": "'session' uses Session Links (default), 'api' uses official API (not yet available)"
+    }
+  },
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "mode": {
+        "type": "string",
+        "enum": ["session", "api"],
+        "default": "session",
+        "description": "Search mode: 'session' (Session Link HTML scraping) or 'api' (official API, not yet implemented)"
+      },
+      "sessionToken": {
+        "type": "string",
+        "description": "Kagi Session Link token (from https://kagi.com/settings/user_details)"
+      },
+      "webSearch": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Kagi API key (for future API mode)"
+          }
+        }
+      }
+    }
+  }
+}
